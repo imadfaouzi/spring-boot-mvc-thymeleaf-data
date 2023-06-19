@@ -1,0 +1,60 @@
+<!DOCTYPE html >
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="template1">
+
+<head>
+  <title>Ajouter Patient</title>
+</head>
+<body>
+
+<div layout:fragment="content1">
+       <div class="card mt-2">
+         <div class="card-header">
+               Ajouter Nouveau patient
+         </div>
+         <div class="card-body">
+             <div class="col-md-6 offset-3" >
+                  <form method="post" th:action="@{save}">
+                    <div class="form-group">
+                        <label for="nom">Nom:</label>
+                        <input type="text" class="form-control" id="nom" name="nom" th:value="${patient.nom}" placeholder="Enter Nom">
+                        <span class="text-danger" th:errors="${patient.nom}"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="dateNaissance">Date de Naissance:</label>
+                        <input type="date" class="form-control" id="dateNaissance"
+                               th:value="${patient.dataNaissance != null ? #dates.format(patient.dataNaissance, 'yyyy-MM-dd') : null}" name="dataNaissance">
+                        <span class="text-danger" th:errors="${patient.dataNaissance}"></span>
+                    </div>
+                    <div class="form-group form-check">
+                        <label class="form-check-label" for="malade">Malade</label>
+                        <input type="checkbox" class="form-check-input" id="malade" th:checked="${patient.malade}" name="malade">
+                        <span class="text-danger" th:errors="${patient.nom}"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="score">Score:</label>
+                        <input type="number" class="form-control" id="score" name="score" placeholder="Enter Score">
+                        <span class="text-danger" th:errors="${patient.score}"></span>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+
+            </form>
+             </div>
+         </div>
+       </div>
+</div>
+</body>
+<style  layout:fragment="some-styling">
+    .form-group{
+        padding: 5px 5px;
+    }
+    .form-check{
+        margin: 5px 25px;
+    }
+
+</style>
+
+</html>

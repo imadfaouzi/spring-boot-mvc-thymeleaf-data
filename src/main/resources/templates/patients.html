@@ -1,0 +1,119 @@
+<!DOCTYPE html >
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="template1">
+
+<head>
+    <title>Title</title>
+</head>
+<body>
+
+<div layout:fragment="content1">
+
+    <div class="container">
+        <div class="card mt-2">
+            <div class="card-header">
+                Liste des Patients
+            </div>
+            <div class="card-body">
+
+                <form class="form-inline" method="get" th:action="@{index}">
+                    <div class="input-group">
+                        <input name="keyword" th:value="${keyword}" class="form-control-sm" type="search" placeholder="Search" aria-label="Search" width="200px">
+                        <div class="input-group-append">
+                            <button class="btn btn-success ms-2" type="submit">Search</button>
+                        </div>
+                    </div>
+                </form>
+
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Date of Birth</th>
+                        <th>Is sick ?</th>
+                        <th>Score</th>
+                        <th>
+                            Action
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="p:${patients}">
+                        <td th:text="${p.getId()}"></td>
+                        <td th:text="${p.getNom()}"></td>
+                        <td th:text="${p.getDataNaissance()}"></td>
+
+<!--                        <td th:text="${p.isMalade()}"></td>-->
+
+                        <td>
+                                <span th:if="${p.isMalade()}" style="background: #e74c3c;color: white;padding: 3px 6px;border-radius: 3px; margin-right:5px;">
+                                    <i class="fa fa-thermometer-three-quarters" aria-hidden="true"></i>
+                                </span>
+                                <span th:unless="${p.isMalade()}" style="background: #2ecc71;color: white;padding: 3px 6px;border-radius: 3px; margin-right:5px;">
+                                    <i class="fa fa-thermometer-quarter" aria-hidden="true"></i>
+                                </span>
+                        </td>
+
+                        <td th:text="${p.getScore()}"></td>
+                        <td>
+                            <a th:href="@{editPatient(id=${p.getId()}, keyword=${keyword}, page=${currentPage}, size=${size})}" style="background: #f1c40f;color: white;padding: 3px 6px;border-radius: 3px; margin-right:5px;">
+                                <i class="fa fa-pencil" aria-hidden="true"></i>
+                            </a>
+                            <a th:href="@{delete(id=${p.getId()}, keyword=${keyword}, page=${currentPage}, size=${size})}" style="background: #e74c3c;color: white;padding: 3px 6px;border-radius: 3px; margin-right:5px;">
+                                <i class="fa fa-trash" aria-hidden="false"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+
+                <nav aria-label="Page navigation example">
+                    <div class="d-flex justify-content-center">
+                      <ul class="pagination">
+
+                        <li class="page-item"
+                            th:classappend="${currentPage == 0? 'disabled':''}">
+                            <a class="page-link"
+                               th:href="${currentPage == 0 ? '' : '/index?keyword='+keyword+'&page='+(currentPage - 1)+'&size='+size }" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+
+                        <li class="page-item" th:each="page, status : ${pages}"
+                            th:class="${status.index == currentPage ? 'page-item active' : 'page-item'}"
+                            th:if="${status.index >= currentPage - 2 && status.index <= currentPage + 2}">
+
+                            <a class="page-link" th:href="@{index(page=${status.index}, keyword=${keyword}, size=${size})}" th:text="${status.index}"></a>
+
+                        </li>
+
+                        <li class="page-item"
+                            th:classappend="${currentPage == pages.length - 1 ? 'disabled':''}">
+                            <a class="page-link"
+                               th:href="${currentPage == pages.length - 1? '' : '/index?keyword='+keyword+'&page='+(currentPage + 1)+'&size='+size }" aria-label="Previous">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+
+
+                    </ul>
+                    </div>
+
+                    <div class="block text-left">
+                         <p>Showing <b th:text="${numberOfpatients}"></b> out of <b th:text="${numberOfpatientsTotal}"></b> </p>
+                    </div>
+                </nav>
+
+
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
